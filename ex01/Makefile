@@ -6,7 +6,7 @@
 #    By: rrouille <rrouille@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 13:26:15 by rrouille          #+#    #+#              #
-#    Updated: 2023/12/06 16:46:34 by rrouille         ###   ########.fr        #
+#    Updated: 2023/12/06 16:46:40 by rrouille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@
 # **************************************************************************** #
 
 # Name of the executable
-NAME            = megaphone
+NAME            = phonebook
 
 # Arguments passed to the executable
 ARGS            = $(filter-out $@,${MAKECMDGOALS})

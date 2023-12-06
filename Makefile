@@ -6,7 +6,7 @@
 #    By: rrouille <rrouille@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 13:26:15 by rrouille          #+#    #+#              #
-#    Updated: 2023/12/06 16:46:34 by rrouille         ###   ########.fr        #
+#    Updated: 2023/12/06 16:47:17 by rrouille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,16 +16,8 @@
 #                                                                              #
 # **************************************************************************** #
 
-# Name of the executable
-NAME            = megaphone
-
 # Arguments passed to the executable
-ARGS            = $(filter-out $@,${MAKECMDGOALS})
-
-# Directories for source and object files
-SRCSDIR         = srcs
-OBJSDIR         = objs
-HDRDIR          = includes/
+ARGS			= $(filter-out $@,${MAKECMDGOALS})
 
 # Terminal color settings for output messages
 GRAY            = \033[0;90m
@@ -57,44 +49,27 @@ INVERTED        = \033[7m
 CLEAR           = \033c
 
 # Source and object files
-SRCS            = $(shell find ${SRCSDIR} -type f -name '*.cpp')
-OBJS            = $(SRCS:${SRCSDIR}/%.cpp=${OBJSDIR}/%.o)
-CXXFLAGS        = -Wall -Wextra -Werror -std=c++98
-CXX             = clang++
-RM              = rm -rf
-MAKE            = make
-MKDIR           = mkdir -p
+MAKE			= make
 
 # **************************************************************************** #
 #                           Compilation Rules                                  #
 # **************************************************************************** #
 
 # Rule to compile the entire program
-all:			${NAME}
-
-# Rule to compile the main executable
-${NAME}:		${OBJS}
-			@${MKDIR} ${OBJSDIR}
-			@${CXX} ${CXXFLAGS} -o ${NAME} ${OBJS}
-
-# # Rule to compile object files
-${OBJSDIR}/%.o:	${SRCSDIR}/%.cpp
-			@echo "${CLEAR}\c"
-			@echo "${YELLOW}⌛ Compiling $< into $@...${ENDCOLOR}\c"
-			@${MKDIR} ${@D}
-			@${CXX} ${CXXFLAGS} -I ${HDRDIR} -c $< -o $@
-			@echo "${CLEAR}\c"
-			@echo "${GREEN}✅ $< compiled into $@! ✨${ENDCOLOR}"
+all:
+			@${MAKE} -C ex00
+			@${MAKE} -C ex01
+			@${MAKE} -C ex02
 
 # Rebuild the entire project
-re:				fclean .WAIT all
+re:		fclean .WAIT all
 
 ################################################################################
 #                                 Github                                       #
 ################################################################################
 
 # Rule to push changes to Git
-push:			fclean
+push:	fclean
 			@git add .
 			@if [ -z "${ARGS}" ]; then \
 				echo "${RED}❌ Please provide a commit message! ✨${ENDCOLOR}"; \
@@ -113,45 +88,22 @@ pull:
 
 # Clean object files and executable
 clean:
-			@echo "${CLEAR}\c"
-			@${RM} ${OBJSDIR}
-			@echo "${GREEN}✅ Simple clean completed! ✨"
+			@${MAKE} clean -C ex00
+			@${MAKE} clean -C ex01
+			@${MAKE} clean -C ex02
 
 # Clean everything including the executable
-fclean:			clean
-			@echo ""
-			@${RM} ${NAME}
-			@echo "${CLEAR}\c"
-			@echo "${GREEN}✅ Deep clean completed! ✨"
+fclean: clean
+			@${MAKE} fclean -C ex00
+			@${MAKE} fclean -C ex01
+			@${MAKE} fclean -C ex02
 
 ################################################################################
 #                             Utility Rules                                    #
 ################################################################################
 
-# Rule to check for memory leaks
-leaks:			clear .WAIT ${NAME}
-			@echo "${CLEAR}\c"
-			@leaks -atExit -- ./${NAME} ${ARGS}
-l:				clear ${NAME}
-			@echo "${CLEAR}\c"
-			@leaks -atExit -- ./${NAME} ${ARGS}
-
-# Rule to run the program with lldb {debugger}
-lldb:			clear .WAIT ${NAME}
-			@echo "${CLEAR}"
-			@lldb ./${NAME} ${ARGS}
-			@echo "${CLEAR}"
-
-# Rule to test the program with arguments
-test: 			${NAME}
-			@./${NAME} ${ARGS}
-
-# Dummy target to prevent arguments from being interpreted as targets
-%:
-			@:
-
 # Rule to clear the screen
 clear:
 			@echo "${CLEAR}\c"
 
-.PHONY:			all clean fclean re test push pull leaks l lldb git clear
+.PHONY: all clean fclean re test push pull leaks l lldb git clear
