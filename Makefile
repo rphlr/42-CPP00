@@ -6,7 +6,7 @@
 #    By: rrouille <rrouille@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 13:26:15 by rrouille          #+#    #+#              #
-#    Updated: 2023/12/06 16:55:09 by rrouille         ###   ########.fr        #
+#    Updated: 2023/12/06 16:55:53 by rrouille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ re:		fclean .WAIT all
 ################################################################################
 
 # Rule to push changes to Git
-push:
+push:	fclean
 			@git add .
 			@if [ -z "${ARGS}" ]; then \
 				echo "${RED}❌ Please provide a commit message! ✨${ENDCOLOR}"; \
@@ -105,5 +105,9 @@ fclean: clean
 # Rule to clear the screen
 clear:
 			@echo "${CLEAR}\c"
+
+# Dummy target to prevent arguments from being interpreted as targets
+%:
+			@:
 
 .PHONY: all clean fclean re test push pull leaks l lldb git clear
