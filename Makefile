@@ -6,7 +6,7 @@
 #    By: rrouille <rrouille@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 13:26:15 by rrouille          #+#    #+#              #
-#    Updated: 2023/12/06 16:47:17 by rrouille         ###   ########.fr        #
+#    Updated: 2023/12/06 16:55:09 by rrouille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,7 +69,7 @@ re:		fclean .WAIT all
 ################################################################################
 
 # Rule to push changes to Git
-push:	fclean
+push:
 			@git add .
 			@if [ -z "${ARGS}" ]; then \
 				echo "${RED}❌ Please provide a commit message! ✨${ENDCOLOR}"; \
