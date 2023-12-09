@@ -6,7 +6,7 @@
 #    By: rrouille <rrouille@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 13:26:15 by rrouille          #+#    #+#              #
-#    Updated: 2023/12/08 19:30:29 by rrouille         ###   ########.fr        #
+#    Updated: 2023/12/09 12:01:34 by rrouille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,7 @@ CLEAR           = \033c
 SRCS            = $(shell find ${SRCSDIR} -type f -name '*.cpp')
 OBJS            = $(SRCS:${SRCSDIR}/%.cpp=${OBJSDIR}/%.o)
 CXXFLAGS        = -Wall -Wextra -Werror -std=c++98
-CXX             = clang++
+CXX             = c++
 RM              = rm -rf
 MAKE            = make
 MKDIR           = mkdir -p
@@ -145,6 +145,10 @@ lldb:			clear .WAIT ${NAME}
 # Rule to test the program with arguments
 test: 			${NAME}
 			@./${NAME} ${ARGS}
+
+# Rule to open evaluation sheet
+eval:
+			@open https://rphlr.github.io/42-Evals/Cursus/CPP00
 
 # Dummy target to prevent arguments from being interpreted as targets
 %:

@@ -6,7 +6,7 @@
 #    By: rrouille <rrouille@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/25 13:26:15 by rrouille          #+#    #+#              #
-#    Updated: 2023/12/06 16:55:53 by rrouille         ###   ########.fr        #
+#    Updated: 2023/12/09 11:41:46 by rrouille         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,6 +105,10 @@ fclean: clean
 # Rule to clear the screen
 clear:
 			@echo "${CLEAR}\c"
+
+# Rule to open evaluation sheet
+eval:
+			@open https://rphlr.github.io/42-Evals/Cursus/CPP00
 
 # Dummy target to prevent arguments from being interpreted as targets
 %:

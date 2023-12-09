@@ -6,46 +6,45 @@
 /*   By: rrouille <rrouille@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 10:57:19 by rrouille          #+#    #+#             */
-/*   Updated: 2023/12/06 16:40:19 by rrouille         ###   ########.fr       */
+/*   Updated: 2023/12/09 14:37:07 by rrouille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "macros.hpp"
 
-void	addContact(Phonebook *phonebook, int contactIndex)
+bool getInput(const std::string& prompt, std::string& input) {
+	while (true) {
+		std::cout << GRAY << prompt << "\n> " << ENDCOLOR;
+		std::getline(std::cin, input);
+		if (std::cin.eof()) return false;
+		if (!input.empty()) return true;
+	}
+}
+
+void addContact(Phonebook *phonebook, int contactIndex)
 {
 	std::string firstName, lastName, nickname, phoneNumber, darkestSecret;
 
-	std::cout << GRAY << "Please enter the contact's first name:\n> " << ENDCOLOR;
-	std::getline(std::cin, firstName);
-	if (std::cin.eof()) return;
+	if (!getInput("Please enter the contact's first name:", firstName)) return;
+	if (!getInput("Please enter the contact's last name:", lastName)) return;
+	if (!getInput("Please enter the contact's nickname:", nickname)) return;
+	if (!getInput("Please enter the contact's phone number:", phoneNumber)) return;
+	if (!getInput("Please enter the contact's darkest secret:", darkestSecret)) return;
 
-	std::cout << GRAY << "Please enter the contact's last name:\n> " << ENDCOLOR;
-	std::getline(std::cin, lastName);
-	if (std::cin.eof()) return;
-
-	std::cout << GRAY << "Please enter the contact's nickname:\n> " << ENDCOLOR;
-	std::getline(std::cin, nickname);
-	if (std::cin.eof()) return;
-
-	std::cout << GRAY << "Please enter the contact's phone number:\n> " << ENDCOLOR;
-	std::getline(std::cin, phoneNumber);
-	if (std::cin.eof()) return;
-
-	std::cout << GRAY << "Please enter the contact's darkest secret:\n> " << ENDCOLOR;
-	std::getline(std::cin, darkestSecret);
-	if (std::cin.eof()) return;
-
-	phonebook->createNewContact(contactIndex % 8, firstName, lastName, nickname, phoneNumber, darkestSecret);
+	phonebook->createNewContact(contactIndex % 8, firstName, lastName, nickname,
+		phoneNumber, darkestSecret);
 }
-
 void	searchContacts(Phonebook *phonebook, int contactCount)
 {
-	std::cout << std::endl;
-	std::cout << std::setw(10) << BOLD << "Index" << "|" << std::setw(10) << "First Name"
-				<< "|" << std::setw(10) << "Last Name" << "|" << std::setw(10)
-				<< "Nickname" << "|" << std::endl << ENDCOLOR;
-	for (int index = -1; index < std::min(contactCount, 8); ++index) {
+	if (contactCount == 0) {
+		std::cout << RED << "No contact to display." << ENDCOLOR << std::endl
+			<< GRAY << "> ";
+		return;
+	}
+	std::cout << std::endl << std::setw(10) << BOLD << "Index" << "|" << std::setw(10)
+		<< "First Name"	<< "|" << std::setw(10) << "Last Name" << "|" << std::setw(10)
+		<< "Nickname" << "|" << std::endl << ENDCOLOR;
+	for (int index = 0; index < std::min(contactCount, 8); index++) {
 		std::string firstName = phonebook->getFirstName(index);
 		std::string lastName = phonebook->getLastName(index);
 		std::string nickname = phonebook->getNickname(index);
@@ -57,7 +56,6 @@ void	searchContacts(Phonebook *phonebook, int contactCount)
 					<< std::setw(10) << lastName << BOLD << "|" << ENDCOLOR
 					<< std::setw(10) << nickname << BOLD << "|" << ENDCOLOR << std::endl;
 	}
-    
 	std::cout << std::endl << GRAY << "Please enter the contact's index to see more details:"
 				<< std::endl << "> " << ENDCOLOR;
 	std::string userIndex;
@@ -83,7 +81,8 @@ int		main()
 
 		if (userCommand == "EXIT") break;
 		else if (userCommand == "ADD") {
-		addContact(&phonebook, contactIndex++);
+			addContact(&phonebook, contactIndex++);
+			if (contactIndex >= 8) contactIndex = 8;
 		} else if (userCommand == "SEARCH") {
 			searchContacts(&phonebook, contactIndex);
 		} else if (!std::cin.eof()) {
