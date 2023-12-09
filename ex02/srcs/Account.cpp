@@ -6,7 +6,7 @@
 /*   By: rrouille <rrouille@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/06 14:55:03 by rrouille          #+#    #+#             */
-/*   Updated: 2023/12/08 19:49:12 by rrouille         ###   ########.fr       */
+/*   Updated: 2023/12/09 11:39:44 by rrouille         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,12 @@ static void	display_time() {
 	const time_t	now								= time(0);
 	tm				*ltm							= localtime(&now);
 
-	std::cout << "[" << GREEN << 1900 + ltm->tm_year << std::setfill('0')
-		<< std::setw(2) << 1 + ltm->tm_mon << std::setfill('0') << std::setw(2)
-		<< ltm->tm_mday << "_" << std::setfill('0') << std::setw(2)
-		<< ltm->tm_hour	<< std::setfill('0') << std::setw(2) << ltm->tm_min
-		<< std::setfill('0') << std::setw(2) << ltm->tm_sec << ENDCOLOR
-		<< "] ";
+	std::cout << GRAY << "[" << WHITE << BOLD << 1900 + ltm->tm_year
+		<< std::setfill('0') << std::setw(2) << 1 + ltm->tm_mon
+		<< std::setfill('0') << std::setw(2) << ltm->tm_mday << "_"
+		<< std::setfill('0') << std::setw(2) << ltm->tm_hour
+		<< std::setfill('0') << std::setw(2) << ltm->tm_min
+		<< std::setfill('0') << std::setw(2) << ltm->tm_sec << GRAY << "] ";
 }
 
 Account::Account(int initial_deposit) : _amount(initial_deposit) {
@@ -35,16 +35,16 @@ Account::Account(int initial_deposit) : _amount(initial_deposit) {
 	_nbDeposits = 0;
 	_nbWithdrawals = 0;
 	_totalAmount += initial_deposit;
-	std::cout << GRAY << "index:" << YELLOW << _accountIndex << GRAY
-		<< ";amount:" << YELLOW << initial_deposit << GRAY << ";created"
-		<< ENDCOLOR << std::endl;
+	std::cout << "index:" << WHITE << BOLD << _accountIndex << GRAY
+		<< ";amount:" << WHITE << BOLD << initial_deposit << GRAY << ";"
+		<< GREEN << "created" << ENDCOLOR << std::endl;
 }
 
 Account::~Account() {
 	display_time();
-	std::cout << BLUE << "index:" << YELLOW << _accountIndex << BLUE
-		<< ";amount:" << YELLOW << _amount << BLUE << ";closed" << ENDCOLOR
-		<< std::endl;
+	std::cout << "index:" << WHITE << BOLD << _accountIndex << GRAY
+		<< ";amount:" << WHITE << BOLD << _amount << GRAY << ";" << RED
+		<< "closed" << ENDCOLOR << std::endl;
 }
 
 int			Account::getNbAccounts() {return _nbAccounts;}
@@ -54,32 +54,33 @@ int			Account::getNbWithdrawals() {return _totalNbWithdrawals;}
 
 void		Account::displayAccountsInfos() {
 	display_time();
-	std::cout << CYAN << "accounts:" << YELLOW << getNbAccounts() << CYAN
-		<< ";total:" << YELLOW << getTotalAmount() << CYAN << ";deposits:"
-		<< YELLOW << getNbDeposits() << CYAN << ";withdrawals:" << YELLOW
-		<< getNbWithdrawals() << ENDCOLOR << std::endl;
+	std::cout << "accounts:" << WHITE << BOLD << getNbAccounts() << GRAY
+		<< ";total:" << WHITE << BOLD << getTotalAmount() << GRAY << ";deposits:"
+		<< WHITE << BOLD << getNbDeposits() << GRAY << ";withdrawals:" << WHITE
+		<< BOLD << getNbWithdrawals() << ENDCOLOR << std::endl;
 }
 
 void		Account::makeDeposit(int deposit) {
 	display_time();
-	std::cout << "index:" << _accountIndex << ";p_amount:" << _amount << ";";
-	std::cout << "deposit:" << deposit << ";";
+	std::cout << "index:" << WHITE << BOLD << _accountIndex << GRAY
+		<< ";p_amount:" << WHITE << BOLD << _amount << GRAY << ";deposit:"
+		<< WHITE << BOLD << deposit << GRAY << ";";
 	_amount += deposit;
 	_totalAmount += deposit;
-	std::cout << "amount:" << _amount << ";";
+	std::cout << GRAY << "amount:" << WHITE << BOLD << _amount << GRAY << ";";
 	_nbDeposits++;
 	_totalNbDeposits++;
-	std::cout << "nb_deposits:" << _nbDeposits << std::endl;
+	std::cout << GRAY << "nb_deposits:" << WHITE << BOLD << _nbDeposits << GRAY
+		<< std::endl << ENDCOLOR;
 }
 
 bool		Account::makeWithdrawal(int withdrawal) {
 	display_time();
-	std::cout << "index:" << _accountIndex << ";";
-	std::cout << "p_amount:" << _amount << ";";
-	std::cout << "withdrawal:";
+	std::cout << "index:" << WHITE << BOLD << _accountIndex << GRAY
+		<< ";p_amount:" << WHITE << BOLD << _amount << GRAY << ";withdrawal:";
 	if (_amount < withdrawal) {
-		std::cout << "refused" << std::endl;
-		return (false);
+		std::cout << RED << "refused" << ENDCOLOR << std::endl;
+		return false;
 	}
 	std::cout << withdrawal << ";";
 	_amount -= withdrawal;
@@ -87,16 +88,16 @@ bool		Account::makeWithdrawal(int withdrawal) {
 	std::cout << "amount:" << _amount << ";";
 	_nbWithdrawals++;
 	_totalNbWithdrawals++;
-	std::cout << "nb_withdrawals:" << _nbWithdrawals << std::endl;
-	return (true);
+	std::cout << "nb_withdrawals:" << _nbWithdrawals << ENDCOLOR << std::endl;
+	return true;
 }
 
 int			Account::checkAmount() const {return _amount;}
 
 void		Account::displayStatus() const {
 	display_time();
-	std::cout << "index:" << _accountIndex << ";";
-	std::cout << "amount:" << _amount << ";";
-	std::cout << "deposits:" << _nbDeposits << ";";
-	std::cout << "withdrawals:" << _nbWithdrawals << std::endl;
+	std::cout << "index:" << WHITE << BOLD << _accountIndex << GRAY
+		<< ";amount:" << WHITE << BOLD << _amount << GRAY << ";deposits:"
+		<< WHITE << BOLD << _nbDeposits << GRAY << ";withdrawals:" << WHITE
+		<< BOLD << _nbWithdrawals << ENDCOLOR  << std::endl;
 }
